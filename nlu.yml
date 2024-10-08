@@ -1,0 +1,78 @@
+version: "3.6"
+
+nlu:
+  - intent: schedule_interview
+    examples: |
+      - I want to schedule an interview
+      - I would like to schedule an interview
+      - Book an interview
+      - can you arrange an interview
+      - please schedule an interview for me
+
+  - intent: greet
+    examples: |
+      - Hi
+      - Hello
+      - Good morning
+      - Good evening
+
+  - intent: inform_time
+    examples: |
+      - I  would like to schedule an interview at [5:30 pm](interview_time)
+      - Let's schedule the interview for [3:00 pm](interview_time)
+      - Can we have the interview at [2:00 pm](interview_time)?
+      - I am available at [4:30 pm](interview_time)
+      - The interview could be scheduled at [11:00 am](interview_time)
+      - Let's do the interview at [9:45 am](interview_time)
+      - How about we schedule the interview at [6:00 pm](interview_time)?
+      - I would prefer [1:30 pm](interview_time) for the interview
+      - Can we schedule it around [10:00 am](interview_time)?
+      - I am available at [7:15 pm](interview_time)
+      - Can we do [12:45 pm](interview_time)?
+      - Let's arrange the interview for [5:00 pm](interview_time)
+      - I would like to schedule the interview at [8:30 am](interview_time)
+
+  - intent: goodbye
+    examples: |
+      - Goodbye
+      - See you later
+      - Bye
+      - Thanks for your help
+      - No
+      - Nothing else
+      - Thankyou
+
+  - intent: inform_date
+    examples: |
+      - I want to schedule an interview on [October 10th](interview_date)
+      - Let’s set it for [November 15th](interview_date)
+      - How about [next Friday](interview_date)?
+      - How about [today](interview_date)?
+      - I’d like to have it [tomorrow](interview_date)
+      - Can we do it on [Thursday](interview_date)?
+      - What about [next Monday](interview_date)?
+      - I want to set the interview for [next Tuesday at 3 PM](interview_date)
+      - [october 25th](interview_date)
+      - [today](interview_date)
+      - [tomorrow](interview_date)
+      - [next thursday](interview_date)
+      - [next sunday](interview_date)
+      - [november 30](interview_date)
+
+  - intent: confirm_interview
+    examples: |
+      - yes
+      - sure
+      - go ahead
+      - that's fine
+      - yes please
+      - confirm
+  - intent: deny_interview
+    examples: |
+      - no
+      - not really
+      - I change my mind
+      - no thanks
+      - not now
+
+

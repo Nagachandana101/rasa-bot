@@ -1,0 +1,72 @@
+version: "3.1"
+
+intents:
+  - greet
+  - schedule_interview
+  - confirm_interview
+  - deny_interview
+  - goodbye
+  - inform_date
+  - inform_time
+
+entities:
+  - interview_date
+  - interview_time
+
+slots:
+  first_name:
+    type: text
+    mappings:
+      - type: from_text
+  last_name: 
+    type: text
+    mappings:
+      - type: from_text
+  interview_date:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: interview_date
+  interview_time:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: interview_time
+  confirmation:
+    type: text
+    mappings:
+      - type: from_text
+
+forms:
+  interview_form:
+    required_slots:
+      - first_name
+      - last_name
+      - interview_date
+      - interview_time
+
+responses:
+  utter_ask_first_name:
+    - text: "What's your first name?"
+  utter_ask_last_name:
+    - text: "What's your last name?"
+  utter_greet:
+    - text: "Hello! How can I assist you today?"
+  utter_ask_interview_date:
+    - text: "When would you like to schedule the interview?"
+  utter_ask_interview_time:
+    - text: "What time?"
+  utter_confirm_interview:
+    - text: "Your interview is scheduled for {interview_date} at {interview_time}. Is there anything else I can assist with?"
+  utter_show_info:
+    - text: "You provided the following information: First Name: {first_name}, Last Name: {last_name}, Interview Date: {interview_date}, Interview Time: {interview_time}. Do you want to confirm this? (y/n)"
+  utter_thank_you:
+    - text: "Thank you! Your interview has been scheduled."
+  utter_goodbye:
+    - text: "Goodbye! Have a great day!"
+  utter_invalid_confirmation:
+    - text: "Please respond with 'yes' or 'no'."
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

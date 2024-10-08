@@ -1,0 +1,34 @@
+version: "3.6"
+
+stories:
+
+  - story: greet
+    steps:
+      - intent: greet
+      - action: utter_greet
+
+  - story: schedule interview
+    steps:
+      - intent: schedule_interview
+      - action: interview_form
+      - active_loop: interview_form
+      - action: utter_show_info
+      - intent: confirm_interview
+      - action: utter_thank_you
+      - action: action_deactivate_loop
+
+  - story: deny interview confirmation
+    steps:
+      - intent: schedule_interview
+      - action: interview_form
+      - active_loop: interview_form
+      - action: utter_show_info
+      - intent: deny_interview
+      - action: utter_invalid_confirmation
+      - action: interview_form
+      - active_loop: interview_form
+
+  - story: goodbye
+    steps:
+      - intent: goodbye
+      - action: utter_goodbye

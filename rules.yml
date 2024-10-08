@@ -1,0 +1,20 @@
+# version: "3.1"
+
+# rules:
+#   - rule: greet user
+#     steps:
+#       - intent: greet
+#       - action: utter_greet
+
+#   - rule: goodbye user
+#     steps:
+#       - intent: goodbye
+#       - action: utter_goodbye
+
+#   - rule: schedule interview
+#     steps:
+#       - intent: schedule_interview
+#       - action: utter_ask_interview_date
+#       - slot_was_set:
+#           - interview_date: "{interview_date}"
+#       - action: utter_confirm_interview

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .chatbox {
+            width: 400px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chatbox-header {
+            background-color: #007BFF;
+            padding: 10px;
+            color: white;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+        }
+
+        .chatbox-body {
+            padding: 10px;
+            max-height: 300px;
+            overflow-y: scroll;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 4px;
+            max-width: 75%;
+        }
+
+        .message.user {
+            background-color: #007BFF;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .message.bot {
+            background-color: #f1f1f1;
+            align-self: flex-start;
+        }
+
+        .chatbox-footer {
+            display: flex;
+            padding: 10px;
+        }
+
+        .chatbox-footer input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .chatbox-footer button {
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+
+        .date-time-picker {
+            display: none;
+            flex-direction: column;
+            margin-top: 10px;
+        }
+
+        .date-time-picker input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="chatbox">
+        <div class="chatbox-header">
+            Chat with the Interview Scheduler Bot
+        </div>
+        <div class="chatbox-body" id="chatbox-body">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="chatbox-footer">
+            <input type="text" id="userInput" placeholder="Type your message here..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+        <div class="date-time-picker" id="dateTimePicker">
+            <input type="date" id="interviewDate" />
+            <input type="time" id="interviewTime" />
+            <button onclick="sendDateTime()">Submit Date and Time</button>
+        </div>
+    </div>
+
+    <script>
+        const chatboxBody = document.getElementById("chatbox-body");
+
+        // Display user and bot messages in the chatbox
+        function displayMessage(message, sender) {
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message", sender);
+            messageElement.innerText = message;
+            chatboxBody.appendChild(messageElement);
+            chatboxBody.scrollTop = chatboxBody.scrollHeight;
+        }
+
+         // Send message to the Rasa bot
+         function sendMessage() {
+             const userInput = document.getElementById("userInput").value;
+             if (userInput === "") return;
+
+            
+             if (userInput.toLowerCase().includes("schedule") || userInput.toLowerCase().includes("interview")) {
+            
+                document.getElementById("dateTimePicker").style.display = "flex";
+                 document.getElementById("userInput").value = ""; // Clear input
+                 return;
+            }
+
+            // Display user message
+            displayMessage(userInput, "user");
+
+            // Clear input field
+            // document.getElementById("userInput").value = "";
+
+            // Send the message to the Rasa server
+            fetch("http://localhost:5005/webhooks/rest/webhook", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    sender: "user",
+                    message: userInput
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display bot response
+                if (data && data.length > 0) {
+                    data.forEach((response) => {
+                        displayMessage(response.text, "bot");
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        }
+
+        // Send the selected date and time to the Rasa bot
+        function sendDateTime() {
+            const interviewDate = document.getElementById("interviewDate").value;
+            const interviewTime = document.getElementById("interviewTime").value;
+
+            if (interviewDate === "" || interviewTime === "") {
+                alert("Please select both date and time.");
+                return;
+            }
+
+            const message = `Interview scheduled on ${interviewDate} at ${interviewTime}`;
+
+            // Display user message
+            displayMessage(message, "user");
+
+            // Hide date and time picker
+            document.getElementById("dateTimePicker").style.display = "none";
+
+            // Send the date and time to the Rasa server
+            fetch("http://localhost:5005/webhooks/rest/webhook", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    sender: "user",
+                    message: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display bot response
+                if (data && data.length > 0) {
+                    data.forEach((response) => {
+                        displayMessage(response.text, "bot");
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        }
+    </script>
+
+</body>
+</html>
